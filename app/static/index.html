@@ -30,6 +30,10 @@
       --accent-blue: #3b82f6;
       --accent-green: #81b64c;
       --accent-hover: #a3d160;
+
+      --board-size: 560px;
+      --eval-width: 32px;
+      --sq-size: calc(var(--board-size) / 8);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -128,7 +132,8 @@
 
     /* Player Bars (Top & Bottom) */
     .player-row {
-      width: 590px;
+      width: calc(var(--board-size) + var(--eval-width));
+      max-width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -175,12 +180,14 @@
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
       border-radius: 4px;
       overflow: hidden;
+      width: calc(var(--board-size) + var(--eval-width));
+      max-width: 100%;
     }
 
     /* Vertical Evaluation Bar (Chess.com attached style) */
     .eval-bar-wrapper {
-      width: 32px;
-      height: 560px;
+      width: var(--eval-width);
+      height: var(--board-size);
       background: #262421;
       position: relative;
       overflow: hidden;
@@ -189,6 +196,7 @@
       justify-content: flex-end;
       border-right: 1px solid rgba(0,0,0,0.4);
       user-select: none;
+      flex-shrink: 0;
     }
     .eval-bar-fill {
       width: 100%;
@@ -211,10 +219,16 @@
       transition: top 0.3s ease, bottom 0.3s ease, color 0.3s ease;
     }
 
-    /* 8x8 Chessboard (Large 560px) */
+    /* 8x8 Chessboard Container */
+    .board-container-inner {
+      position: relative;
+      width: var(--board-size);
+      height: var(--board-size);
+      flex-shrink: 0;
+    }
     .board-wrapper {
-      width: 560px;
-      height: 560px;
+      width: var(--board-size);
+      height: var(--board-size);
       display: grid;
       grid-template-columns: repeat(8, 1fr);
       grid-template-rows: repeat(8, 1fr);
@@ -225,20 +239,20 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 560px;
-      height: 560px;
+      width: var(--board-size);
+      height: var(--board-size);
       pointer-events: none;
       z-index: 10;
     }
     .square {
-      width: 70px;
-      height: 70px;
+      width: var(--sq-size);
+      height: var(--sq-size);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       cursor: pointer;
-      font-size: 52px;
+      font-size: calc(var(--sq-size) * 0.74);
       transition: background 0.12s ease;
     }
     .square.light { background: var(--sq-light); color: #000; }
@@ -353,7 +367,8 @@
 
     /* Below Board Controls (Nav & Flip) */
     .board-footer-bar {
-      width: 590px;
+      width: calc(var(--board-size) + var(--eval-width));
+      max-width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -407,7 +422,8 @@
 
     /* Branch Choice Notification Bar */
     .branch-selector-bar {
-      width: 590px;
+      width: calc(var(--board-size) + var(--eval-width));
+      max-width: 100%;
       background: #1e293b;
       border: 1px solid #3b82f6;
       border-radius: 6px;
@@ -1007,6 +1023,158 @@
     .toast.show {
       display: block !important;
     }
+
+    /* Tablet & Responsive Media Queries */
+    @media (max-width: 1080px) {
+      .main-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 16px 12px;
+      }
+      .board-column {
+        width: 100%;
+        max-width: 600px;
+      }
+      .sidebar-column {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        max-height: 480px;
+      }
+      .lower-section {
+        max-width: 600px;
+        padding: 0 12px 28px 12px;
+      }
+    }
+
+    /* Mobile Phone Media Queries (Small Viewports) */
+    @media (max-width: 640px) {
+      :root {
+        --board-size: min(calc(100vw - 32px), 420px);
+        --eval-width: 20px;
+      }
+      .app-header {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .logo-area {
+        justify-content: space-between;
+      }
+      .logo-area h1 {
+        font-size: 16px;
+      }
+      .header-actions {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        gap: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .header-actions::-webkit-scrollbar {
+        display: none;
+      }
+      .btn-hdr {
+        padding: 6px 10px;
+        font-size: 11.5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .main-grid {
+        padding: 8px 6px;
+        gap: 14px;
+      }
+      .board-column {
+        width: 100%;
+        max-width: calc(var(--board-size) + var(--eval-width));
+      }
+      .player-row {
+        width: 100%;
+        max-width: calc(var(--board-size) + var(--eval-width));
+        font-size: 12.5px;
+        padding: 4px 2px;
+      }
+      .player-timer {
+        font-size: 12px;
+        padding: 2px 7px;
+      }
+      .eval-bar-score {
+        font-size: 9px;
+      }
+      .square .coord {
+        font-size: 8.5px;
+      }
+      .board-footer-bar {
+        width: 100%;
+        max-width: calc(var(--board-size) + var(--eval-width));
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .nav-buttons-group {
+        gap: 4px;
+        width: 100%;
+      }
+      .nav-btn {
+        height: 38px;
+        font-size: 16px;
+      }
+      .btn-action-sm {
+        padding: 6px 9px;
+        font-size: 11.5px;
+      }
+      .sidebar-column {
+        width: 100%;
+        max-width: calc(var(--board-size) + var(--eval-width));
+        height: auto;
+        max-height: 360px;
+      }
+      .lower-section {
+        width: 100%;
+        max-width: calc(var(--board-size) + var(--eval-width));
+        padding: 0 6px 24px 6px;
+      }
+      .card {
+        padding: 12px 14px;
+      }
+      .card-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .book-plans-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .metrics-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        width: 100%;
+      }
+      .metric-card {
+        padding: 6px 3px;
+      }
+      .metric-lbl {
+        font-size: 9.5px;
+      }
+      .metric-val {
+        font-size: 12.5px;
+      }
+      .commentary-desc {
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+      pre.json-viewer {
+        height: 140px;
+        max-height: 140px;
+        font-size: 10.5px;
+      }
+      .modal-box {
+        padding: 16px;
+        width: 95%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1051,7 +1219,7 @@
         </div>
 
         <!-- 8x8 Board & SVG Arrow Overlay -->
-        <div style="position: relative; width: 560px; height: 560px;">
+        <div class="board-container-inner">
           <div id="board" class="board-wrapper"></div>
           <svg id="boardArrowsSvg" class="board-arrows-svg" viewBox="0 0 560 560"></svg>
         </div>
@@ -2555,15 +2723,32 @@
       if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Keyboard Shortcuts (←, →, Home, End, F)
+    // Keyboard Shortcuts (Space, ←, →, Home, End, F, A)
     window.addEventListener('keydown', (e) => {
       if (document.activeElement && (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT')) return;
+      if (e.key === ' ' || e.key === 'Spacebar' || e.code === 'Space') {
+        e.preventDefault();
+        navNext(); // Spacebar steps forward to next move, NEVER resets!
+        return;
+      }
       if (e.key === 'ArrowLeft') { navPrev(); }
       else if (e.key === 'ArrowRight') { navNext(); }
       else if (e.key === 'Home') { navStart(); }
       else if (e.key === 'End') { navEnd(); }
       else if (e.key === 'f' || e.key === 'F') { toggleFlipBoard(); }
       else if (e.key === 'a' || e.key === 'A') { toggleBestMoveArrow(); }
+    });
+
+    // Prevent clicked buttons from retaining focus and triggering on accidental spacebar
+    document.addEventListener('mouseup', () => {
+      if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
+        document.activeElement.blur();
+      }
+    });
+    document.addEventListener('touchend', () => {
+      if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
+        document.activeElement.blur();
+      }
     });
 
     function resetToStart() {
@@ -3224,8 +3409,7 @@
         const rankNum = parseInt(sq[1]);
         const col = isFlipped ? (7 - fileIdx) : fileIdx;
         const row = isFlipped ? (rankNum - 1) : (8 - rankNum);
-        const sqEl = document.querySelector('.square');
-        const sqSize = (sqEl && sqEl.offsetWidth > 0) ? sqEl.offsetWidth : 70;
+        const sqSize = 70; // 560 / 8 in SVG viewBox coordinate space
         return {
           x: col * sqSize + sqSize / 2,
           y: row * sqSize + sqSize / 2
