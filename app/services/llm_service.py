@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from typing import AsyncGenerator, Optional, List
+from typing import AsyncGenerator, Optional, List, Any, Dict, Tuple, Callable
 
 from app.config import settings
 from app.schemas.analysis import AnalysisPacket, MoveQuality, CommentarySections
