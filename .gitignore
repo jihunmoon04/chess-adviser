@@ -1,0 +1,7 @@
+﻿.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+stockfish.exe
+.pytest_cache/
